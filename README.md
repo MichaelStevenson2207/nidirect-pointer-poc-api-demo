@@ -1,5 +1,7 @@
 # .Net api for an address lookup using GDS standards
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=MichaelStevenson2207_nidirect-pointer-poc-api-demo&metric=alert_status&token=9688a5b5428078033e4fcdd24ab616faa6312dbd)](https://sonarcloud.io/summary/new_code?id=MichaelStevenson2207_nidirect-pointer-poc-api-demo)
+
 This is an api for addresses for Northern Ireland which act as an address lookup which utilises a Redis cache to cache requests. 
 This was designed with the api principles created by <a href="https://www.gov.uk/guidance/gds-api-technical-and-data-standards">GDS in Gov.uk</a> in mind.
 
@@ -36,6 +38,7 @@ This helps to cache common queries into a Redis cache to lift the burden off the
 - Health check UI
 - Monitoring
 - Redis caching
+- Result / maybe monad
 
 To run:
 
