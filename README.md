@@ -70,13 +70,7 @@ If deploying to the cloud remember to add a username and password for watchdog i
 
 Keep it secret, keep it safe.  I always make sure locally I use app secrets instead of appsettings and to use Azure Key vault in the cloud.
 
-
-![gandalf](https://github.com/MichaelStevenson2207/nidirect-pointer-poc-api-demo/assets/66303816/db8468bc-04ea-48ef-afa7-a896a92baa0e)
-
 Please make sure not to merge in your secrets but I do have Git guardian running on the repo.
-
-![frodo](https://github.com/MichaelStevenson2207/nidirect-pointer-poc-api-demo/assets/66303816/0bf31ff8-67d8-4c33-8d56-7f88173d1a40)
-
 
 
 
