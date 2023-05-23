@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nidirect-pointer-poc-api", "nidirect-pointer-poc-api\nidirect-pointer-poc-api.csproj", "{BB4B79B7-FB73-4AE2-BB1F-7420655AA320}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nidirect-pointer-poc-infrastructure", "nidirect-pointer-poc-infrastructure\nidirect-pointer-poc-infrastructure.csproj", "{5B9DFB45-BFFE-46AA-A6AF-47403B7D92EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nidirect-pointer-poc-core", "nidirect-pointer-poc-core\nidirect-pointer-poc-core.csproj", "{5F915E86-CB48-40E4-A11F-9C95370426AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB4B79B7-FB73-4AE2-BB1F-7420655AA320}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB4B79B7-FB73-4AE2-BB1F-7420655AA320}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB4B79B7-FB73-4AE2-BB1F-7420655AA320}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB4B79B7-FB73-4AE2-BB1F-7420655AA320}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B9DFB45-BFFE-46AA-A6AF-47403B7D92EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B9DFB45-BFFE-46AA-A6AF-47403B7D92EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B9DFB45-BFFE-46AA-A6AF-47403B7D92EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B9DFB45-BFFE-46AA-A6AF-47403B7D92EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F915E86-CB48-40E4-A11F-9C95370426AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F915E86-CB48-40E4-A11F-9C95370426AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F915E86-CB48-40E4-A11F-9C95370426AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F915E86-CB48-40E4-A11F-9C95370426AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4BA1BB5-0BA9-4FC5-B21D-C2DCB5C0EFA1}
+	EndGlobalSection
+EndGlobal
