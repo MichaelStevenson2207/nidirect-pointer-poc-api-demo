@@ -47,6 +47,10 @@ Dotnet build - to build
 Then to create the database (you need sql server installed) with 1 seeded entry:
 update-database in the Nuget package manager tools in Visual studio.
 
+Redis
+
+You will have to create a Redis service in Azure to utilise the caching.
+
 Jwt authentication
 
 You need to add a key, Issuer and Audience in appsettings but I recommned always keeping these in your secrets file.
