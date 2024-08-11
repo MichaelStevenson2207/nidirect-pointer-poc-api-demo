@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/nidirect-pointer-poc-api/watchlogs-log.db
+/nidirect-pointer-poc-api/watchlogs.db
