@@ -43,7 +43,8 @@ namespace nidirect_pointer_poc_api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async ValueTask<IActionResult> GetAll([FromQuery] GetAllQuery request, CancellationToken cancellationToken)
+        public async ValueTask<IActionResult> GetAll([FromQuery] GetAllQuery request,
+            CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(request, cancellationToken: cancellationToken).ConfigureAwait(false);
             return result.OnBoth(r => r.IsSuccess ? (IActionResult)Ok(r.Value) : NotFound(r.Error));
@@ -63,9 +64,12 @@ namespace nidirect_pointer_poc_api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async ValueTask<IActionResult> GetAddressByPostcode([FromQuery] GetAddressByPostCodeQuery request, CancellationToken cancellationToken)
+        public async ValueTask<IActionResult> GetAddressByPostcode([FromQuery] GetAddressByPostCodeQuery request,
+            CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new GetAddressByPostCodeQuery() { PostCode = request.PostCode }, cancellationToken).ConfigureAwait(false);
+            var result = await _mediator
+                .Send(new GetAddressByPostCodeQuery() { PostCode = request.PostCode }, cancellationToken)
+                .ConfigureAwait(false);
 
             if (result.IsFailure)
             {
@@ -89,9 +93,14 @@ namespace nidirect_pointer_poc_api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async ValueTask<IActionResult> GetByBuildingNumberPostCode([FromQuery] GetByBuildingNumberPostCodeQuery request, CancellationToken cancellationToken)
+        public async ValueTask<IActionResult> GetByBuildingNumberPostCode(
+            [FromQuery] GetByBuildingNumberPostCodeQuery request, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new GetByBuildingNumberPostCodeQuery() { PostCode = request.PostCode, BuildingNumber = request.BuildingNumber }, cancellationToken).ConfigureAwait(false);
+            var result = await _mediator
+                .Send(
+                    new GetByBuildingNumberPostCodeQuery()
+                        { PostCode = request.PostCode, BuildingNumber = request.BuildingNumber }, cancellationToken)
+                .ConfigureAwait(false);
 
             if (result.IsFailure)
             {
