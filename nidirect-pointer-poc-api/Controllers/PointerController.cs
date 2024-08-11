@@ -1,4 +1,5 @@
-﻿using dss_common.Extensions;
+﻿using Asp.Versioning;
+using dss_common.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

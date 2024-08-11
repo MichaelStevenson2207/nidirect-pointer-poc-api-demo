@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text;
+using Asp.Versioning;
 using AspNetCoreRateLimit;
 using Azure.Identity;
 using FluentValidation;
@@ -7,7 +8,6 @@ using FluentValidation.AspNetCore;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -108,11 +108,11 @@ builder.Services.AddApiVersioning(options =>
     options.ReportApiVersions = true;
 });
 
-builder.Services.AddVersionedApiExplorer(opts =>
-{
-    opts.GroupNameFormat = "'v'VVV";
-    opts.SubstituteApiVersionInUrl = true;
-});
+//builder.Services.AddVersionedApiExplorer(opts =>
+//{
+//    opts.GroupNameFormat = "'v'VVV";
+//    opts.SubstituteApiVersionInUrl = true;
+//});
 
 // Setup fluent validation
 builder.Services.AddFluentValidationAutoValidation();
