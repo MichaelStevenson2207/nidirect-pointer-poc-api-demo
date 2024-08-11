@@ -10,83 +10,82 @@ using nidirect_pointer_poc_infrastructure.Data;
 using nidirect_pointer_poc_infrastructure.Features.Common;
 using nidirect_pointer_poc_infrastructure.Features.Extensions;
 
-namespace nidirect_pointer_poc_infrastructure.Features.Pointer.Queries
+namespace nidirect_pointer_poc_infrastructure.Features.Pointer.Queries;
+
+public class GetAllQuery : IRequest<Result<PagedResult<PointerDto>>>
 {
-    public class GetAllQuery : IRequest<Result<PagedResult<PointerDto>>>
+    public GetAllQuery()
     {
-        public GetAllQuery()
-        {
-            PageNumber = 1;
-            PageSize = 10;
-        }
-        public GetAllQuery(int pageNumber, int pageSize)
-        {
-            PageNumber = pageNumber;
-            PageSize = pageSize;
-        }
-
-        public required int PageNumber { get; set; }
-        public required int PageSize { get; set; }
+        PageNumber = 1;
+        PageSize = 10;
+    }
+    public GetAllQuery(int pageNumber, int pageSize)
+    {
+        PageNumber = pageNumber;
+        PageSize = pageSize;
     }
 
-    public class GetAllQueryValidator : AbstractValidator<GetAllQuery>
+    public required int PageNumber { get; set; }
+    public required int PageSize { get; set; }
+}
+
+public class GetAllQueryValidator : AbstractValidator<GetAllQuery>
+{
+    public GetAllQueryValidator()
     {
-        public GetAllQueryValidator()
-        {
-            RuleFor(m => m.PageNumber).GreaterThan(0);
-        }
+        RuleFor(m => m.PageNumber).GreaterThan(0);
+    }
+}
+
+public class GetAllQueryHandler : IRequestHandler<GetAllQuery, Result<PagedResult<PointerDto>>>
+{
+    private readonly PointerContext _pointerContext;
+    private readonly IMapper _mapper;
+    private readonly IUriService _uriService;
+    private readonly IDistributedCache _cache;
+
+    public GetAllQueryHandler(PointerContext pointerContext, IMapper mapper, IUriService uriService, IDistributedCache cache)
+    {
+        _pointerContext = pointerContext;
+        _mapper = mapper;
+        _uriService = uriService;
+        _cache = cache;
     }
 
-    public class GetAllQueryHandler : IRequestHandler<GetAllQuery, Result<PagedResult<PointerDto>>>
+    public async Task<Result<PagedResult<PointerDto>>> Handle(GetAllQuery request, CancellationToken cancellationToken)
     {
-        private readonly PointerContext _pointerContext;
-        private readonly IMapper _mapper;
-        private readonly IUriService _uriService;
-        private readonly IDistributedCache _cache;
+        var key = $"GetAll_{request.PageNumber}_{request.PageSize}";
 
-        public GetAllQueryHandler(PointerContext pointerContext, IMapper mapper, IUriService uriService, IDistributedCache cache)
+        var getAddresses = await _cache.GetRecordAsync<PagedResult<PointerDto>>(key);
+
+        if (getAddresses is null)
         {
-            _pointerContext = pointerContext;
-            _mapper = mapper;
-            _uriService = uriService;
-            _cache = cache;
-        }
+            var pagination = await _pointerContext.Pointer.AsQueryable()
+                .CountAsync(cancellationToken);
 
-        public async Task<Result<PagedResult<PointerDto>>> Handle(GetAllQuery request, CancellationToken cancellationToken)
-        {
-            var key = $"GetAll_{request.PageNumber}_{request.PageSize}";
+            var addresses = await _pointerContext.Pointer.AsQueryable()
+                .OrderBy(p => p.Id)
+                .Skip((request.PageNumber - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .ProjectTo<PointerDto>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken)
+                .ConfigureAwait(false);
 
-            var getAddresses = await _cache.GetRecordAsync<PagedResult<PointerDto>>(key);
-
-            if (getAddresses is null)
+            var paginationDetails = new PaginationDetails
             {
-                var pagination = await _pointerContext.Pointer.AsQueryable()
-                    .CountAsync(cancellationToken);
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize
+            };
 
-                var addresses = await _pointerContext.Pointer.AsQueryable()
-                    .OrderBy(p => p.Id)
-                    .Skip((request.PageNumber - 1) * request.PageSize)
-                    .Take(request.PageSize)
-                    .ProjectTo<PointerDto>(_mapper.ConfigurationProvider)
-                    .ToListAsync(cancellationToken)
-                    .ConfigureAwait(false);
+            paginationDetails.WithTotal(pagination);
 
-                var paginationDetails = new PaginationDetails
-                {
-                    PageNumber = request.PageNumber,
-                    PageSize = request.PageSize
-                };
+            var paginationResponse = PagedResult<PointerDto>.CreatePaginatedResponse(_uriService, paginationDetails, addresses);
 
-                paginationDetails.WithTotal(pagination);
+            await _cache.SetRecordAsync(key, paginationResponse);
 
-                var paginationResponse = PagedResult<PointerDto>.CreatePaginatedResponse(_uriService, paginationDetails, addresses);
-
-                await _cache.SetRecordAsync(key, paginationResponse);
-
-                return Result.Ok(paginationResponse);
-            }
-
-            return Result.Ok(getAddresses);
+            return Result.Ok(paginationResponse);
         }
+
+        return Result.Ok(getAddresses);
     }
 }

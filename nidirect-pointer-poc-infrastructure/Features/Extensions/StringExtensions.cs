@@ -1,24 +1,23 @@
-﻿namespace nidirect_pointer_poc_infrastructure.Features.Extensions
+﻿namespace nidirect_pointer_poc_infrastructure.Features.Extensions;
+
+public static class StringExtensions
 {
-    public static class StringExtensions
+    private const int MaxPostCodeLength = 7;
+
+    public static string FormatPostCode(string postcode)
     {
-        private const int MaxPostCodeLength = 7;
+        string formattedPostcode = postcode.Replace("-", "").Replace(" ", "").ToUpper();
 
-        public static string FormatPostCode(string postcode)
+        switch (formattedPostcode.Length)
         {
-            string formattedPostcode = postcode.Replace("-", "").Replace(" ", "").ToUpper();
-
-            switch (formattedPostcode.Length)
-            {
-                case 6:
-                    formattedPostcode = formattedPostcode.Insert(3, " ");
-                    break;
-                case MaxPostCodeLength:
-                    formattedPostcode = formattedPostcode.Insert(4, " ");
-                    break;
-            }
-
-            return formattedPostcode;
+            case 6:
+                formattedPostcode = formattedPostcode.Insert(3, " ");
+                break;
+            case MaxPostCodeLength:
+                formattedPostcode = formattedPostcode.Insert(4, " ");
+                break;
         }
+
+        return formattedPostcode;
     }
 }

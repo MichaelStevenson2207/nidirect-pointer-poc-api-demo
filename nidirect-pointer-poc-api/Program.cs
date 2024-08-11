@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Text;
+using Asp.Versioning;
 using AspNetCoreRateLimit;
 using Azure.Identity;
 using FluentValidation;
@@ -7,7 +8,6 @@ using FluentValidation.AspNetCore;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -108,11 +108,11 @@ builder.Services.AddApiVersioning(options =>
     options.ReportApiVersions = true;
 });
 
-builder.Services.AddVersionedApiExplorer(opts =>
-{
-    opts.GroupNameFormat = "'v'VVV";
-    opts.SubstituteApiVersionInUrl = true;
-});
+//builder.Services.AddVersionedApiExplorer(opts =>
+//{
+//    opts.GroupNameFormat = "'v'VVV";
+//    opts.SubstituteApiVersionInUrl = true;
+//});
 
 // Setup fluent validation
 builder.Services.AddFluentValidationAutoValidation();
@@ -150,7 +150,7 @@ builder.Services.AddWatchDogServices(options =>
     options.IsAutoClear = false;
 });
 
-builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
+//builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 // Set up Redis Cache
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -180,7 +180,7 @@ app.UseSwaggerUI(options =>
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<PointerContext>();
-    db.Database.Migrate();
+    await db.Database.MigrateAsync();
 }
 
 app.UseHttpsRedirection();
@@ -204,4 +204,4 @@ app.UseWatchDog(options =>
 });
 
 app.MapHealthChecksUI();
-app.Run();
+await app.RunAsync();
