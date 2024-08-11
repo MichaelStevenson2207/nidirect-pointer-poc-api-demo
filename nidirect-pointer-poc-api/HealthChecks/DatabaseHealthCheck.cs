@@ -2,55 +2,54 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace nidirect_pointer_poc_api.HealthChecks
+namespace nidirect_pointer_poc_api.HealthChecks;
+
+/// <summary>
+/// Health check for database
+/// </summary>
+public sealed class DatabaseHealthCheck : IHealthCheck
 {
+    private readonly string _connectionString;
+
     /// <summary>
-    /// Health check for database
+    /// Constructor
     /// </summary>
-    public sealed class DatabaseHealthCheck : IHealthCheck
+    /// <param name="connectionString"></param>
+    public DatabaseHealthCheck(string connectionString)
     {
-        private readonly string _connectionString;
+        _connectionString = connectionString;
+    }
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="connectionString"></param>
-        public DatabaseHealthCheck(string connectionString)
+    /// <summary>
+    /// Checks the health of the database
+    /// </summary>
+    /// <param name="context"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        try
         {
-            _connectionString = connectionString;
-        }
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-        /// <summary>
-        /// Checks the health of the database
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            try
+            using (var connection = new SqlConnection(_connectionString))
             {
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
+                await connection.OpenAsync(cancellationToken);
 
-                using (var connection = new SqlConnection(_connectionString))
+                // Perform custom performance check logic
+                TimeSpan elapsed = stopwatch.Elapsed;
+                if (elapsed.TotalMilliseconds > 600)
                 {
-                    await connection.OpenAsync(cancellationToken);
-
-                    // Perform custom performance check logic
-                    TimeSpan elapsed = stopwatch.Elapsed;
-                    if (elapsed.TotalMilliseconds > 600)
-                    {
-                        return HealthCheckResult.Degraded("SQL Server response time is degraded");
-                    }
-
-                    return HealthCheckResult.Healthy();
+                    return HealthCheckResult.Degraded("SQL Server response time is degraded");
                 }
+
+                return HealthCheckResult.Healthy();
             }
-            catch (Exception ex)
-            {
-                return HealthCheckResult.Unhealthy(ex.ToString());
-            }
+        }
+        catch (Exception ex)
+        {
+            return HealthCheckResult.Unhealthy(ex.ToString());
         }
     }
 }

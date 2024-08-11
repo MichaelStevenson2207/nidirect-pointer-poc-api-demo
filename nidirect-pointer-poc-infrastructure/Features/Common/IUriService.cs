@@ -1,8 +1,7 @@
-﻿namespace nidirect_pointer_poc_infrastructure.Features.Common
+﻿namespace nidirect_pointer_poc_infrastructure.Features.Common;
+
+public interface IUriService
 {
-    public interface IUriService
-    {
-        Uri CreateNextPageUri(PaginationDetails paginationDetails);
-        Uri CreatePreviousPageUri(PaginationDetails paginationDetails);
-    }
+    Uri CreateNextPageUri(PaginationDetails paginationDetails);
+    Uri CreatePreviousPageUri(PaginationDetails paginationDetails);
 }
